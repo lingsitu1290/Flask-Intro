@@ -16,7 +16,9 @@ AWESOMENESS = [
 def start_here():
     """Home page."""
 
-    return "Hi! This is the home page."
+    return """Hi! This is the home page. 
+    Click here for the <a href="/hello"> hello</a> 
+    page."""
 
 
 @app.route('/hello')
@@ -32,9 +34,21 @@ def say_hello():
       <body>
         <h1>Hi There!</h1>
         <form action="/greet">
-          <label>What's your name? <input type="text" name="person"></label>
+          <label>What's your name? <input type="text" name="person"></label> <br>
+          <label> Choose a compliment: </label> 
+            <select name="compliment">
+              <option value="funny">Funny</option> 
+              <option value="terrific">Terrific</option> 
+              <option value="cool">Cool</option> 
+            </select><br>
           <input type="submit">
         </form>
+
+        <h1>Yo!</h1>
+        <form action="/diss">
+          <label>What's your name? <input type="text" name="person"></label> <br>
+          <input type="submit">
+        </form>        
       </body>
     </html>
     """
@@ -46,8 +60,7 @@ def greet_person():
 
     player = request.args.get("person")
 
-    compliment = choice(AWESOMENESS)
-
+    compliment = request.args.get("compliment")
     return """
     <!doctype html>
     <html>
@@ -59,6 +72,22 @@ def greet_person():
       </body>
     </html>
     """ % (player, compliment)
+
+@app.route('/diss')
+def diss_person():
+  """Insult user by name."""
+  player = request.args.get("person")
+  return """
+    <!doctype html>
+    <html>
+      <head>
+        <title>An Insult</title>
+      </head>
+      <body>
+        Hi %s I think you have turkey breath!
+      </body>
+    </html>
+    """ % (player)
 
 
 if __name__ == '__main__':
